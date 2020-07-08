@@ -2,9 +2,9 @@ FROM alpine:latest
 
 RUN mkdir ffmpeg
 COPY ffmpeg /ffmpeg
-RUN apt-get update & apt-get install build-essential \
-    apt-get install manpages-dev \
-    apt-get install yasm
+RUN apk add build-essential \
+    apk add manpages-dev \
+    apk add yasm
 
 RUN ./ffmpeg/configure --prefix=/usr/local \
             --enable-swscale --enable-avfilter --enable-avresample \
