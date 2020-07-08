@@ -1,6 +1,6 @@
 FROM nexus-docker-public-group.ossim.io/centos:7
 RUN mkdir ffmpeg
-COPY ./ffmpeg /ffmpeg
+COPY ../ffmpeg /ffmpeg
 RUN ./ffmpeg/configure --prefix=/usr/local \
             --enable-swscale --enable-avfilter --enable-avresample \
             --enable-libmp3lame --enable-libvorbis \
