@@ -35,7 +35,7 @@ node(POD_LABEL){
     {
         checkout(scm)
     }
-    String VERSION = readFile(file: '/Version.txt')
+    String VERSION = readFile(file: './Version.txt')
     stage("Load Variables")
     {
       withCredentials([string(credentialsId: 'o2-artifact-project', variable: 'o2ArtifactProject')]) {
