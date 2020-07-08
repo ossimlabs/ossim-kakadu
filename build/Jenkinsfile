@@ -6,7 +6,7 @@ properties([
     pipelineTriggers([
             [$class: "GitHubPushTrigger"]
     ]),
-    [$class: 'GithubProjectProperty', displayName: '', projectUrlStr: 'https://github.com/ossimlabs/omar-builder'],
+    [$class: 'GithubProjectProperty', displayName: '', projectUrlStr: 'https://github.com/ossimlabs/ossim-ffmpeg'],
     buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '3', daysToKeepStr: '', numToKeepStr: '20')),
     disableConcurrentBuilds()
 ])
@@ -35,7 +35,7 @@ node(POD_LABEL){
     {
         checkout(scm)
     }
-    String VERSION = readFile(file: './Version.txt')
+    String VERSION = readFile(file: '/Version.txt')
     stage("Load Variables")
     {
       withCredentials([string(credentialsId: 'o2-artifact-project', variable: 'o2ArtifactProject')]) {
@@ -52,7 +52,7 @@ node(POD_LABEL){
         {
             withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}") {
                 sh """
-                  docker build --network=host -t ${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}/gradle-docker-builder:$VERSION .
+                  docker build --network=host -t ${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}/gradle-ossim-ffmpeg:$VERSION .
                 """
             }
         }
@@ -63,7 +63,7 @@ node(POD_LABEL){
         {
             withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}") {
                 sh """
-                  docker push ${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}/gradle-docker-builder:$VERSION
+                  docker push ${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}/ossim-ffmpeg:$VERSION
                 """
             }
         }

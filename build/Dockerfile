@@ -1,22 +1,19 @@
-FROM docker:latest
+FROM nexus-docker-public-group.ossim.io/centos:7
 
-# Default to UTF-8 file.encoding
-ENV LANG C.UTF-8
+RUN ./configure --prefix=/usr/local \
+            --enable-swscale --enable-avfilter --enable-avresample \
+            --enable-libmp3lame --enable-libvorbis \
+            --enable-librsvg --enable-libtheora --enable-libopenjpeg \
+            --enable-libmodplug --enable-libsoxr \
+            --enable-libspeex --enable-libass --enable-libbluray \
+            --enable-lzma --enable-gnutls --enable-fontconfig --enable-libfreetype \
+            --enable-libfribidi --disable-libjack --disable-libopencore-amrnb \
+            --disable-libopencore-amrwb --disable-libxcb --disable-libxcb-shm --disable-libxcb-xfixes \
+            --disable-indev=jack --disable-outdev=xv\
+            --enable-sdl2 --disable-securetransport --mandir=/usr/local/share/man \
+            --enable-shared --enable-pthreads --arch=x86_64 --enable-x86asm \
+            --enable-gpl --enable-postproc --enable-libx264 
+RUN /ffmpeg/make -j 8 install
 
-# add a simple script that can auto-detect the appropriate JAVA_HOME value
-# based on whether the JDK or only the JRE is installed
-RUN { \
-        echo '#!/bin/sh'; \
-        echo 'set -e'; \
-        echo; \
-        echo 'dirname "$(dirname "$(readlink -f "$(which javac || which java)")")"'; \
-    } > /usr/local/bin/docker-java-home \
-    && chmod +x /usr/local/bin/docker-java-home
-
-ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk
-ENV PATH $PATH:/usr/lib/jvm/java-1.8-openjdk/jre/bin:/usr/lib/jvm/java-1.8-openjdk/bin
-
-ENV JAVA_VERSION 8u111
-ENV JAVA_ALPINE_VERSION 8.111.14-r0
-
-RUN set -x && apk add --no-cache openjdk8 && [ "$JAVA_HOME" = "$(docker-java-home)" ]
+RUN strip `find /usr/local/lib -type f`
+RUN strip /usr/local/bin/* || true
