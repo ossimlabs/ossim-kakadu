@@ -4,8 +4,8 @@ RUN mkdir ffmpeg
 COPY ffmpeg /ffmpeg
 
 RUN apk update & apk add build-base 
-RUN apk update & apk add gcc 
-RUN apk update & apk add yasm
+RUN apk add gcc 
+RUN apk add yasm
 
 RUN ./ffmpeg/configure --prefix=/usr/local \
             --enable-swscale --enable-avfilter --enable-avresample \
