@@ -1,4 +1,4 @@
-FROM nexus-docker-public-group.ossim.io/centos:7
+FROM frolvlad/alpine-glibc
 RUN mkdir ffmpeg
 COPY ffmpeg /ffmpeg
 RUN ./ffmpeg/configure --prefix=/usr/local \
