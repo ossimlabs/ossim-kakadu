@@ -1,4 +1,5 @@
-FROM frolvlad/alpine-glibc
+FROM gcc:latest
+
 RUN mkdir ffmpeg
 COPY ffmpeg /ffmpeg
 RUN ./ffmpeg/configure --prefix=/usr/local \
