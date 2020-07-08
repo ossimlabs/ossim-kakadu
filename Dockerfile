@@ -1,8 +1,11 @@
-FROM gcc:latest
+FROM alpine:latest
 
 RUN mkdir ffmpeg
 COPY ffmpeg /ffmpeg
-RUN apt-get update & apt-get install yasm
+RUN apt update & apt install build-essential \
+    apt-get install manpages-dev \
+    apt-get install yasm
+
 RUN ./ffmpeg/configure --prefix=/usr/local \
             --enable-swscale --enable-avfilter --enable-avresample \
             --enable-libmp3lame --enable-libvorbis \
