@@ -4,6 +4,7 @@ RUN mkdir ffmpeg
 COPY ffmpeg /ffmpeg
 RUN apk update \
     apk add build-base \
+    apk add gcc \
     apk add yasm
 
 RUN ./ffmpeg/configure --prefix=/usr/local \
