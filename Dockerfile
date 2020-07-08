@@ -2,7 +2,8 @@ FROM alpine:latest
 
 RUN mkdir ffmpeg
 COPY ffmpeg /ffmpeg
-RUN apk add build-base \
+RUN apk update \
+    apk add build-base \
     apk add yasm
 
 RUN ./ffmpeg/configure --prefix=/usr/local \
