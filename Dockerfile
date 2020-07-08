@@ -2,7 +2,7 @@ FROM alpine:latest
 
 RUN mkdir ffmpeg
 COPY ffmpeg /ffmpeg
-RUN apt update & apt install build-essential \
+RUN apt-get update & apt-get install build-essential \
     apt-get install manpages-dev \
     apt-get install yasm
 
