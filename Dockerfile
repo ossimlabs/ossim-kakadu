@@ -3,10 +3,7 @@ FROM alpine:latest
 RUN mkdir ffmpeg
 COPY ffmpeg /ffmpeg
 
-RUN apk update & apk add build-base 
-RUN apk add gcc 
-RUN apk add yasm
-RUN apk add gnutls
+RUN apk update & apk add wget git gcc-c++ cmake make autoconf automake libtool nasm yasm gnutls-devel 
 
 RUN ./ffmpeg/configure --prefix=/usr/local \
             --enable-swscale --enable-avfilter --enable-avresample \
