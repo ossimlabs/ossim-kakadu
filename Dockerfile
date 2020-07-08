@@ -2,6 +2,7 @@ FROM gcc:latest
 
 RUN mkdir ffmpeg
 COPY ffmpeg /ffmpeg
+RUN apk add yasm
 RUN ./ffmpeg/configure --prefix=/usr/local \
             --enable-swscale --enable-avfilter --enable-avresample \
             --enable-libmp3lame --enable-libvorbis \
