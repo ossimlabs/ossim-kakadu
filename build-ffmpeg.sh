@@ -1,7 +1,8 @@
 #!/bin/bash
 
 cd ffmpeg-4.2
-./configure --prefix=/usr/local \
+./configure --enable-static \
+            --prefix=/usr/local \
             --enable-swscale --enable-avfilter --enable-avresample \
             --enable-libmp3lame --enable-libvorbis \
             --enable-librsvg --enable-libtheora --enable-libopenjpeg \
