@@ -1,6 +1,6 @@
 properties([
     parameters ([
-        
+        string(name: 'DOCKER_REGISTRY_DOWNLOAD_URL', defaultValue: 'nexus-docker-private-group.ossim.io', description: 'Repository of docker images')
         booleanParam(name: 'CLEAN_WORKSPACE', defaultValue: true, description: 'Clean the workspace at the end of the run')
     ]),
     pipelineTriggers([
@@ -14,7 +14,7 @@ podTemplate(
   containers: [
     containerTemplate(
       name: 'builder',
-      image: 'nexus-docker-public-group.ossim.io:omar-builder-latest',
+      image: 'DOCKER_REGISTRY_DOWNLOAD_URL/omar-builder:latest',
       ttyEnabled: true,
       command: 'cat',
       privileged: true
@@ -47,11 +47,19 @@ node(POD_LABEL){
         }
         load "common-variables.groovy"
     }
-    stage (" Build Docker App")
+    stage (" Checkout ffmpeg")
     {
         container('builder') 
         {
             sh """./checkout-ffmpeg.sh
+                  """
+        }
+    }
+    stage (" Build ffmpeg")
+    {
+        container('builder') 
+        {
+            sh """
                   ./build-ffmpeg.sh"""
         }
     }
