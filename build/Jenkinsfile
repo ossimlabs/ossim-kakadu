@@ -13,12 +13,13 @@ properties([
 podTemplate(
   containers: [
     containerTemplate(
-      name: 'docker',
-      image: 'docker:latest',
+      name: 'builder',
+      image: 'nexus-docker-public-group.ossim.io:omar-builder-latest',
       ttyEnabled: true,
       command: 'cat',
       privileged: true
     )
+    
   ],
   volumes: [
     hostPathVolume(
@@ -35,7 +36,7 @@ node(POD_LABEL){
     {
         checkout(scm)
     }
-    String VERSION = readFile(file: './Version.txt')
+    
     stage("Load Variables")
     {
       withCredentials([string(credentialsId: 'o2-artifact-project', variable: 'o2ArtifactProject')]) {
@@ -48,27 +49,13 @@ node(POD_LABEL){
     }
     stage (" Build Docker App")
     {
-        container('docker') 
+        container('builder') 
         {
-            withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}") {
-                sh """
-                  
-                  docker build --network=host -t ${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}/gradle-ossim-ffmpeg:$VERSION .
-                """
-            }
+            sh """./checkout-ffmpeg.sh
+                  ./build-ffmpeg.sh"""
         }
     }
-    stage ("Push Docker App")
-    {
-        container('docker')
-        {
-            withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}") {
-                sh """
-                  docker push ${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}/ossim-ffmpeg:$VERSION
-                """
-            }
-        }
-    }
+    
 	stage("Clean Workspace"){
     if ("${CLEAN_WORKSPACE}" == "true")
       step([$class: 'WsCleanup'])
