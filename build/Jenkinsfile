@@ -14,7 +14,7 @@ podTemplate(
   containers: [
     containerTemplate(
       name: 'builder',
-      image: 'DOCKER_REGISTRY_DOWNLOAD_URL/omar-builder:latest',
+      image: "${DOCKER_REGISTRY_DOWNLOAD_URL}/omar-builder:latest",
       ttyEnabled: true,
       command: 'cat',
       privileged: true
