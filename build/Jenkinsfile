@@ -14,7 +14,7 @@ podTemplate(
   containers: [
     containerTemplate(
       name: 'builder',
-      image: "${DOCKER_REGISTRY_DOWNLOAD_URL}/ossim-deps-builder:latest",
+      image: "${DOCKER_REGISTRY_DOWNLOAD_URL}/ossim-deps-builder:1.0",
       ttyEnabled: true,
       command: 'cat',
       privileged: true
