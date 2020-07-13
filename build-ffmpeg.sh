@@ -3,6 +3,7 @@
 cd ffmpeg-4.2
 ./configure --enable-static \
             --prefix=/usr/local \
+            --enable-libx264 \
             --enable-swscale --enable-avfilter --enable-avresample \
             --enable-libmp3lame --enable-libvorbis \
             --enable-librsvg --enable-libtheora --enable-libopenjpeg \
