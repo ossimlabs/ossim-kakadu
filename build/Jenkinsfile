@@ -51,8 +51,10 @@ node(POD_LABEL){
     {
         container('builder') 
         {
-            sh """./checkout-ffmpeg.sh
-                  """
+            sh """
+              ./checkout-x264.sh
+              ./checkout-ffmpeg.sh
+            """
         }
     }
     stage (" Build ffmpeg")
@@ -60,7 +62,9 @@ node(POD_LABEL){
         container('builder') 
         {
             sh """
-                  ./build-ffmpeg.sh"""
+              ./build-x264.sh
+              ./build-ffmpeg.sh
+            """
         }
     }
     
