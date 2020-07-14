@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ffmpeg-4.2
+cd ffmpeg
 ./configure --enable-static --disable-opencl \
             --prefix=/usr/local \
             --enable-swscale --enable-avfilter --enable-avresample \
