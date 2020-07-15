@@ -1,7 +1,8 @@
 properties([
     parameters ([
         string(name: 'DOCKER_REGISTRY_DOWNLOAD_URL', defaultValue: 'nexus-docker-private-group.ossim.io', description: 'Repository of docker images'),
-        booleanParam(name: 'CLEAN_WORKSPACE', defaultValue: true, description: 'Clean the workspace at the end of the run')
+        booleanParam(name: 'CLEAN_WORKSPACE', defaultValue: true, description: 'Clean the workspace at the end of the run'),
+        string(name: 'KAKADU_VERSION', defaultValue: 'OrchidIsland-2.11.1', description: 'Tag of ossim-private to use for kakadu')
     ]),
     pipelineTriggers([
             [$class: "GitHubPushTrigger"]
@@ -13,13 +14,21 @@ properties([
 podTemplate(
   containers: [
     containerTemplate(
+        name: 'git',
+        image: 'alpine/git:latest',
+        ttyEnabled: true,
+        command: 'cat',
+        envVars: [
+            envVar(key: 'HOME', value: '/root')
+        ]
+    ),
+    containerTemplate(
       name: 'builder',
       image: "${DOCKER_REGISTRY_DOWNLOAD_URL}/ossim-deps-builder:1.0",
       ttyEnabled: true,
       command: 'cat',
       privileged: true
     )
-    
   ],
   volumes: [
     hostPathVolume(
@@ -49,11 +58,17 @@ node(POD_LABEL){
     }
     stage (" Checkout ffmpeg")
     {
-        container('builder') 
+        container('git') 
         {
+          git(
+              url: 'git@github.com:Maxar-Corp/ossim-private.git',
+              credentialsId: 'ossimlabs-minion-ssh-key',
+              branch: "master"
+          )
             sh """
-              ./checkout-x264.sh
-              ./checkout-ffmpeg.sh
+              mkdir kakadu
+              cd kakadu
+              git checkout "${KAKADU_VERSION}"
             """
         }
     }
@@ -62,8 +77,7 @@ node(POD_LABEL){
         container('builder') 
         {
             sh """
-              ./build-x264.sh
-              ./build-ffmpeg.sh
+              ./build-kakadu
             """
         }
     }
