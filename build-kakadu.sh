@@ -1,4 +1,5 @@
 #!/bin/bash
+export CXXFLAGS=-DKDU_NO_THREADS
 
 cd ./ossim-private/kakadu/v7_7_1-01123C
 cd make
