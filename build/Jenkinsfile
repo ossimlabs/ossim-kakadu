@@ -60,16 +60,16 @@ node(POD_LABEL){
     {
         container('git') 
         {
-          git(
-              url: 'git@github.com:Maxar-Corp/ossim-private.git',
-              credentialsId: 'ossimlabs-minion-ssh-key',
-              branch: "master"
-          )
-            sh """
-              mkdir kakadu
-              cd kakadu
-              git checkout "${KAKADU_VERSION}"
-            """
+          dir("ossim-private"){
+            git(
+                url: 'git@github.com:Maxar-Corp/ossim-private.git',
+                credentialsId: 'ossimlabs-minion-ssh-key',
+                branch: "master"
+            )
+          sh """
+            git checkout "${KAKADU_VERSION}"
+          """
+          }
         }
     }
     stage (" Build ffmpeg")
@@ -77,7 +77,8 @@ node(POD_LABEL){
         container('builder') 
         {
             sh """
-              ./build-kakadu
+            ls
+              ./build-kakadu.sh
             """
         }
     }
