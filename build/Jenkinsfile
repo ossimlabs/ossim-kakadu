@@ -78,10 +78,17 @@ node(POD_LABEL){
         container('builder') 
         {
             sh """
-            ls
               ./build-kakadu.sh
+              tar -czvf ${BUILD_IMAGE}-kakadu.tgz /usr/local
             """
         }
+    }
+    
+    stage("Publish"){
+        withCredentials([usernameColonPassword(credentialsId: 'nexusCredentials', variable: 'NEXUS_CREDENTIALS')])
+          {
+            sh "curl -v -u ${NEXUS_CREDENTIALS} --upload-file ${BUILD_IMAGE}-kakadu.tgz https://nexus.ossim.io/repository/ossim-dependencies/"
+          }
     }
     
 	stage("Clean Workspace"){
