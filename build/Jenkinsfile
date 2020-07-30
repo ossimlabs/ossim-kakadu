@@ -79,7 +79,7 @@ node(POD_LABEL){
         {
             sh """
               ./build-kakadu.sh
-              tar -czvf ${BUILD_IMAGE}-kakadu.tgz /ossim-private
+              tar -czvf ${BUILD_IMAGE}-kakadu.tgz ossim-private
             """
         }
     }
@@ -87,7 +87,6 @@ node(POD_LABEL){
         withCredentials([usernameColonPassword(credentialsId: 'nexusCredentials', variable: 'NEXUS_CREDENTIALS')]){
             container('builder') {
                 sh """
-                cd /usr/local
                 curl -v -u ${NEXUS_CREDENTIALS} --upload-file ${BUILD_IMAGE}-kakadu.tgz https://nexus.ossim.io/repository/ossim-dependencies/
                 """
             }
