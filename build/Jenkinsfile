@@ -85,10 +85,14 @@ node(POD_LABEL){
         }
     }
     
-    stage("Publish"){
-        withCredentials([usernameColonPassword(credentialsId: 'nexusCredentials', variable: 'NEXUS_CREDENTIALS')])
+    withCredentials([usernameColonPassword(credentialsId: 'nexusCredentials', variable: 'NEXUS_CREDENTIALS')])
           {
-            sh "curl -v -u ${NEXUS_CREDENTIALS} --upload-file ${BUILD_IMAGE}-kakadu.tgz https://nexus.ossim.io/repository/ossim-dependencies/"
+            container('builder') {
+                sh """
+                cd /usr/local
+                curl -v -u ${NEXUS_CREDENTIALS} --upload-file ${BUILD_IMAGE}-kakadu.tgz https://nexus.ossim.io/repository/ossim-dependencies/
+                """
+            }
           }
     }
     
