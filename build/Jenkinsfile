@@ -79,7 +79,8 @@ node(POD_LABEL){
         {
             sh """
               ./build-kakadu.sh
-              tar -czvf ${BUILD_IMAGE}-kakadu.tgz ossim-private
+              cd ossim-private
+              tar -czvf ${BUILD_IMAGE}-kakadu.tgz 
             """
         }
     }
